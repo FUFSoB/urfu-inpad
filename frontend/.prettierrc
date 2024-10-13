@@ -35,6 +35,8 @@
     "(.config)$",
     "(.types)$",
     "(.scss)$",
+    "(reset.scss)$",
+    "(global.scss)$",
     "^../(.*)",
     "^./(.*)"
   ],

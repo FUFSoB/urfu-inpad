@@ -57,6 +57,7 @@ export default [
       "jsx-a11y/tabindex-no-positive": 0,
       "sonarjs/no-duplicate-string": 0,
       "jsx-a11y/anchor-has-content": 0,
+      "sonarjs/no-commented-code": 0,
 
       /** Possible Errors */
       "no-cond-assign": 2,
@@ -163,7 +164,6 @@ export default [
       "func-style": [2, "declaration", { allowArrowFunctions: true }],
       "key-spacing": [2, { beforeColon: false, afterColon: true }],
       "lines-around-comment": [2, { beforeBlockComment: false, beforeLineComment: false, allowBlockStart: false }],
-      "linebreak-style": [2, "unix"],
       "max-nested-callbacks": [2, MAX_NESTED_CALLBACKS],
       "new-cap": 2,
       "new-parens": 2,
