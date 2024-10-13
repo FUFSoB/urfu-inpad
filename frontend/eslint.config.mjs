@@ -206,6 +206,7 @@ export default [
       "space-unary-ops": [2, { words: true, nonwords: false }],
       "spaced-comment": [2, "always", { block: { exceptions: ["-+*"] } }],
       "wrap-regex": 0,
+      "import/no-unused-modules": [1, { unusedExports: true }],
 
       /** ECMAScript 6  */
       "constructor-super": 0,
