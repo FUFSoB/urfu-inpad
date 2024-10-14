@@ -1,0 +1,7 @@
+fastapi
+python-jose
+bcrypt
+uvicorn
+
+httpx
+pytest
