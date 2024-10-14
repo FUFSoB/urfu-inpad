@@ -61,16 +61,16 @@ def test_register_user():
     response = httpx.post(f"{BASE_URL}/register", json=user)
     assert response.status_code == 200
     data = response.json()
+    token_data = data["token"]
+    user_data = data["user"]
 
-    assert "access_token" in data
-    access_token = data["access_token"]
+    access_token = token_data["access_token"]
     response = httpx.get(f"{BASE_URL}/protected", headers = {"Authorization": f"Bearer {access_token}"})
     assert response.status_code == 200
 
-    assert "refresh_token" in data
-    response = httpx.post(f"{BASE_URL}/refresh", json={"refresh_token": data["refresh_token"]})
+    response = httpx.post(f"{BASE_URL}/refresh", json={"refresh_token": token_data["refresh_token"]})
     assert response.status_code == 200
 
-    response = httpx.post(f"{BASE_URL}/login", json={"username": user["username"], "password": user["password"]})
+    response = httpx.post(f"{BASE_URL}/login", json={"username": user_data["username"], "password": user_data["password"]})
     assert response.status_code == 200
     assert "access_token" in response.json()
