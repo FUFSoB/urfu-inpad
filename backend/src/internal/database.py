@@ -1,6 +1,6 @@
 from .security import get_password_hash
 
-__all__ = ("users",)
+__all__ = ("users","project")
 
 users = [
     {
@@ -12,4 +12,13 @@ users = [
         "surname": "Юзеров",
         "middle_name": "Юзерович",
     },
+]
+
+project = [
+    {
+        "name": "Пассаж2",
+        "location": 0,
+        "type": "Торговый центр",
+        "square": 12,
+    }
 ]
