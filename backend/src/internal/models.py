@@ -5,9 +5,11 @@ __all__ = (
     "TokenData",
     "UserLogin",
     "User",
-    "SampleMessage",
+    "UserData",
     "RegisteredResponse",
 )
+
+# TODO: Better naming for the models
 
 
 class Token(BaseModel):
@@ -34,10 +36,14 @@ class User(BaseModel):
     middle_name: str
 
 
-class SampleMessage(BaseModel):
-    message: str
+class UserData(BaseModel):
+    username: str
+    email: str
+    name: str
+    surname: str
+    middle_name: str
 
 
 class RegisteredResponse(BaseModel):
     token: Token
-    user: User
+    user: UserData

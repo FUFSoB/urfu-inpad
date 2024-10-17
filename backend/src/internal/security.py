@@ -3,12 +3,11 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 import bcrypt
 
-from typing import Optional
-
 __all__ = (
     "verify_password",
     "get_password_hash",
     "check_password_strength",
+    "create_token",
     "create_access_token",
     "create_refresh_token",
     "verify_token",
@@ -36,22 +35,21 @@ def check_password_strength(password: str) -> bool:
     return len(password) >= 8
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+def create_token(data: dict, expires_delta: timedelta) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (
-        expires_delta or timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
-    )
+    expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def create_refresh_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (
-        expires_delta or timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    return create_token(data, expires_delta or timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS))
+
+
+def create_refresh_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    return create_token(
+        data, expires_delta or timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     )
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def verify_token(token: str) -> str:
