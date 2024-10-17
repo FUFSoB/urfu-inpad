@@ -3,7 +3,9 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 from fastapi import Depends, FastAPI, HTTPException, Query
 from typing import Annotated
 
-__all__ = ("users","project")
+__all__ = ("users", "project", "get_user_by_username")
+
+# TODO: Replace with real database
 
 users = [
     {
@@ -26,6 +28,7 @@ project = [
     }
 ]
 
+<<<<<<< HEAD
 class User (SQLModel, table = True):
     id:int | None = Field(default=None, index=True)
     username:str = Field(index=True)
@@ -69,3 +72,11 @@ def read_user(user_id: int, session: SessionDep) -> User:
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+=======
+
+def get_user_by_username(username: str) -> dict:
+    for user in users:
+        if user["username"] == username:
+            return user
+    return None
+>>>>>>> 368224eed1e237e0e4762ad803d12ef14109ea08
