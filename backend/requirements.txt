@@ -2,6 +2,9 @@ fastapi
 python-jose
 bcrypt
 uvicorn
+sqlmodel
+asyncpg
+alembic
 
 httpx
 pytest

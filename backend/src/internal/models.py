@@ -4,7 +4,7 @@ __all__ = (
     "Token",
     "TokenData",
     "UserLogin",
-    "User",
+    "UserRegister",
     "UserData",
     "RegisteredResponse",
 )
@@ -23,21 +23,19 @@ class TokenData(BaseModel):
 
 
 class UserLogin(BaseModel):
-    username: str
-    password: str
-
-
-class User(BaseModel):
-    username: str
-    password: str
     email: str
+    password: str
+
+
+class UserRegister(BaseModel):
+    email: str
+    password: str
     name: str
     surname: str
     middle_name: str
 
 
 class UserData(BaseModel):
-    username: str
     email: str
     name: str
     surname: str

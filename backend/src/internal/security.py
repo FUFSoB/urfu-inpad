@@ -20,15 +20,17 @@ REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    password_byte_enc = plain_password.encode("utf-8")
-    return bcrypt.checkpw(password=password_byte_enc, hashed_password=hashed_password)
+    return bcrypt.checkpw(
+        password=plain_password.encode("utf-8"),
+        hashed_password=hashed_password.encode("utf-8"),
+    )
 
 
 def get_password_hash(password: str) -> str:
     pwd_bytes = password.encode("utf-8")
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
-    return hashed_password
+    return hashed_password.decode("utf-8")
 
 
 def check_password_strength(password: str) -> bool:
@@ -55,9 +57,9 @@ def create_refresh_token(data: dict, expires_delta: timedelta | None = None) -> 
 def verify_token(token: str) -> str:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        uuid: str = payload.get("sub")
+        if uuid is None:
             raise ValueError("Invalid token")
-        return username
+        return uuid
     except JWTError:
         raise ValueError("Invalid token")

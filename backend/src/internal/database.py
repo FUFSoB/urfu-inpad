@@ -1,82 +1,59 @@
-from .security import get_password_hash
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from fastapi import Depends, FastAPI, HTTPException, Query
-from typing import Annotated
+from sqlmodel import Field, SQLModel, select
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
-__all__ = ("users", "project", "get_user_by_username")
+__all__ = ("User", "get_user_by_email", "get_user_by_uuid", "get_session", "init_db")
 
-# TODO: Replace with real database
+# TODO: migrations
 
-users = [
-    {
-        "id": 0,
-        "username": "user",
-        "password": get_password_hash("password"),
-        "email": "example@example.com",
-        "name": "Юзер",
-        "surname": "Юзеров",
-        "middle_name": "Юзерович",
-    },
-]
 
-project = [
-    {
-        "name": "Пассаж2",
-        "location": 0,
-        "type": "Торговый центр",
-        "square": 12,
-    }
-]
+class User(SQLModel, table=True):
+    uuid: str = Field(primary_key=True, index=True)
+    email: str = Field(index=True, unique=True)
+    password: str = Field(index=True)
+    name: str = Field(index=True)
+    surname: str = Field(index=True)
+    middle_name: str = Field(index=True)
 
-<<<<<<< HEAD
-class User (SQLModel, table = True):
-    id:int | None = Field(default=None, index=True)
-    username:str = Field(index=True)
-    password:str = Field(index=True)
-    email:str = Field(index=True)
-    name:str = Field(index=True)
-    surname:str = Field(index=True)
-    middle_name:str = Field(index=True)
 
-pgsql_file_name = "database.db"
-pgsql_url = f"pgsql:///{pgsql_file_name}"
+DATABASE_URL = "postgresql+asyncpg://inpad:tuyweytghgb@localhost/inpad_db"
 
-connect_args = {"check_same":False}
-engine = create_engine(pgsql_url, connect_args=connect_args)
+# async engine
+engine = create_async_engine(DATABASE_URL)
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+    autocommit=False,
+)
 
-def get_session():
-    with Session(engine) as session:
-        yield session
 
-SessionDep = Annotated[Session, Depends(get_session)]
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
 
-app = FastAPI()
 
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
+async def get_session() -> AsyncSession:
+    async with AsyncSessionLocal() as session:
+        async with session.begin():
+            return session
 
-@app.post("/users/")
-def create_user(user: User, session: SessionDep) -> User:
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
 
-@app.get("/users/{user_id}")
-def read_user(user_id: int, session: SessionDep) -> User:
-    user = session.get(User, user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
-=======
-
-def get_user_by_username(username: str) -> dict:
-    for user in users:
-        if user["username"] == username:
+async def get_user_by_email(email: str) -> User | None:
+    async with AsyncSessionLocal() as session:
+        async with session.begin():
+            statement = select(User).where(User.email == email)
+            result = await session.execute(statement)
+            user = result.scalars().first()
             return user
-    return None
->>>>>>> 368224eed1e237e0e4762ad803d12ef14109ea08
+
+
+async def get_user_by_uuid(uuid: str) -> User | None:
+    async with AsyncSessionLocal() as session:
+        async with session.begin():
+            statement = select(User).where(User.uuid == uuid)
+            result = await session.execute(statement)
+            user = result.scalars().first()
+            return user
