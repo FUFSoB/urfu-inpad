@@ -1,10 +1,12 @@
 fastapi
 python-jose
 bcrypt
-uvicorn
 sqlmodel
 asyncpg
 alembic
+
+uvicorn
+python-dotenv
 
 httpx
 pytest

@@ -1,3 +1,5 @@
+import os
+
 from sqlmodel import Field, SQLModel, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -16,7 +18,18 @@ class User(SQLModel, table=True):
     middle_name: str = Field(index=True)
 
 
-DATABASE_URL = "postgresql+asyncpg://inpad:tuyweytghgb@localhost/inpad_db"
+PG_HOST = os.getenv("PG_HOST")
+PG_PORT = os.getenv("PG_PORT")
+PG_USER = os.getenv("PG_USER")
+PG_PASSWORD = os.getenv("PG_PASSWORD")
+PG_DATABASE = os.getenv("PG_DATABASE")
+
+if not all((PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DATABASE)):
+    raise ValueError("Not all database environment variables are set")
+
+DATABASE_URL = (
+    f"postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
+)
 
 # async engine
 engine = create_async_engine(DATABASE_URL)
