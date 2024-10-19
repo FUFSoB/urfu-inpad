@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 
 from jose import JWTError, jwt
@@ -13,7 +14,7 @@ __all__ = (
     "verify_token",
 )
 
-SECRET_KEY = "hgkadshtuiqweiuhtewio5uy2349o6y8itvhbwv3kb4j5yn2f390hn78tg3yw4vob4g6t37"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 1
 REFRESH_TOKEN_EXPIRE_DAYS = 7
