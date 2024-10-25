@@ -1,0 +1,12 @@
+fastapi
+python-jose
+bcrypt
+sqlmodel
+asyncpg
+alembic
+
+uvicorn
+python-dotenv
+
+httpx
+pytest
