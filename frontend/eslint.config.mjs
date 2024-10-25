@@ -15,7 +15,7 @@ const MAX_STATEMENTS = 10;
 export default [
   {
     files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    ignores: ["**/node_modules/**", "eslint.config.mjs", "build", "public", "prettier.config.mjs"],
+    ignores: ["**/node_modules/**", "eslint.config.mjs", "build", "public", "prettier.config.mjs", "package.json"],
     plugins: {
       react,
       promise,

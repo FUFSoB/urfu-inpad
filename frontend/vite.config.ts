@@ -4,9 +4,6 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    exclude: ["js-big-decimal"],
-  },
   resolve: {
     alias: {
       "@": "/src",
@@ -14,10 +11,15 @@ export default defineConfig({
   },
   css: {
     devSourcemap: true,
+    preprocessorOptions: {
+      scss: {
+        api: "modern-compiler",
+      },
+    },
   },
   server: {
     port: 7123,
-    open: true,
+    open: false,
     host: "localhost",
   },
   build: {
